@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set +x -eEu
+
+VERSION=$1
+
+DIR="`dirname $0`/../.tmp/yarn"
+mkdir -p $DIR && cd $DIR
+DIR=`pwd`
+
+echo '{}' > "$DIR/package.json"
+
+npm install yarn@$VERSION --ignore-scripts --no-save --no-optional --no-package-lock --no-progress --silent

@@ -1,0 +1,35 @@
+#!/bin/bash
+set +x -eEu
+export PATH="./node_modules/.bin:$PATH"
+
+. `dirname $0`/_helpers
+
+cd $ROOT
+
+function yarn() {
+  ./.tmp/yarn/node_modules/.bin/yarn "$@"
+}
+
+trap trap-exit EXIT
+trap trap-error INT TERM
+
+# npx yarn@`node -p -e "require('./package.json').dependencies.yarn"`
+
+line '|0/5] Install correct version of yarn'
+v=`node -p -e "require('./package.json').dependencies.yarn"`
+`dirname $0`/install-yarn $v
+
+line '|1/5] Yarn install'
+yarn --frozen-lockfile
+
+line '[2/5] Lint'
+yarn lint
+
+line '[3/5] Run tests'
+yarn test --coverage --ci
+
+line '[4/5] Build packages'
+yarn build
+
+line '[5/5] Publish packages if new version is available'
+$ROOT/bin/publish

@@ -1,0 +1,34 @@
+{
+  "name": "@scope/example-lib2",
+  "private": false,
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types.bak": "./index.d.ts",
+  "_main": "dist/foo-bar.umd.js",
+  "_module": "dist/foo-bar.es5.js",
+  "_typings": "dist/types/foo-bar.d.ts",
+  "scripts": {
+    "test": "jest --notify",
+    "lint": "tslint -c ../../tslint.json --project tsconfig.json -t codeFrame --fix",
+    "compile": "run-p -l compile:*",
+    "compile:ts": "rimraf dist && tsc -b tsconfig.json",
+    "compile:js": "babel src --root-mode upward --verbose --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "build": "rimraf dist && microbundle build src/index.ts -o dist/",
+    "dist": "NODE_ENV=production webpack --config ../../config/webpack/index.ts --colors --hide-modules --display-error-details"
+  },
+  "files": [
+    "dist/*",
+    "index.d.ts"
+  ],
+  "devDependencies": {
+    "microbundle": "0.9.0",
+    "typescript": "3.3.1"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "@babel/preset-env": "^7.3.1",
+    "@scope/example-lib1": "*",
+    "typescript-tslint-plugin": "0.3.1"
+  }
+}
